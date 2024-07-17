@@ -24,11 +24,11 @@ type TemplateData struct {
 
 func (app *Config) render(w http.ResponseWriter, r *http.Request, t string, td *TemplateData) {
 	partials := []string{
-		fmt.Sprintf("%s/base.layout.gohtml"),
-		fmt.Sprintf("%s/header.partial.gohtml"),
-		fmt.Sprintf("%s/navbar.partial.gohtml"),
-		fmt.Sprintf("%s/footer.partial.gohtml"),
-		fmt.Sprintf("%s/alerts.partial.gohtml"),
+		fmt.Sprintf("%s/base.layout.gohtml", pathToTemplates),
+		fmt.Sprintf("%s/header.partial.gohtml", pathToTemplates),
+		fmt.Sprintf("%s/navbar.partial.gohtml", pathToTemplates),
+		fmt.Sprintf("%s/footer.partial.gohtml", pathToTemplates),
+		fmt.Sprintf("%s/alerts.partial.gohtml", pathToTemplates),
 	}
 	var templateSlice []string
 	templateSlice = append(templateSlice, fmt.Sprintf("%s/%s", pathToTemplates, t))
