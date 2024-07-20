@@ -57,6 +57,7 @@ func (m *Mail) sendMail(msg Message, errorChan chan error) {
 
 	// build plain text mail
 	plainMessage, err := m.buildPlainTextMessage(msg)
+	_ = plainMessage
 	if err != nil {
 		errorChan <- err
 	}
