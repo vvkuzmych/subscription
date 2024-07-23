@@ -20,7 +20,7 @@ type Mail struct {
 	FromAddress string
 	FromName    string
 	Wait        *sync.WaitGroup
-	MailerChane chan Message
+	MailerChan  chan Message
 	ErrorChan   chan error
 	DoneChan    chan bool
 }
@@ -39,7 +39,7 @@ type Message struct {
 func (app *Config) listenForMail() {
 	for {
 		select {
-		case msg := <-app.Mailer.MailerChane:
+		case msg := <-app.Mailer.MailerChan:
 			go app.Mailer.sendMail(msg, app.Mailer.ErrorChan)
 		case err := <-app.Mailer.ErrorChan:
 			go app.ErrorLog.Println(err)

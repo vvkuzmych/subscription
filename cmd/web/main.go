@@ -77,7 +77,7 @@ func (app *Config) createMail() Mail {
 		FromAddress: "info@mycompany.com",
 		Wait:        app.Wait,
 		ErrorChan:   errorChan,
-		MailerChane: mailerChan,
+		MailerChan:  mailerChan,
 		DoneChan:    mailerDoneChan,
 	}
 
@@ -186,5 +186,9 @@ func (app *Config) shutdown() {
 	// block until waitgroup is empty
 	app.Wait.Wait()
 
+	app.Mailer.DoneChan <- true
 	app.InfoLog.Println("closing channels and shutting down application")
+	close(app.Mailer.MailerChan)
+	close(app.Mailer.ErrorChan)
+	close(app.Mailer.DoneChan)
 }
