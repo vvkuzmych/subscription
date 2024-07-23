@@ -40,7 +40,7 @@ func main() {
 
 	// create channels
 
-	// create waitgroup
+	// create wait group
 	wg := sync.WaitGroup{}
 
 	// set up the application config
@@ -53,11 +53,35 @@ func main() {
 		Models:   data.New(db),
 	}
 	// set up mail
+	app.Mailer = app.createMail()
+	go app.listenForMail()
 
 	// listen for signals
 	go app.listenForShutdown()
+
 	// listen for web connections
 	app.serve()
+}
+
+func (app *Config) createMail() Mail {
+	errorChan := make(chan error)
+	mailerChan := make(chan Message, 100)
+	mailerDoneChan := make(chan bool)
+
+	mail := Mail{
+		Domain:      "localhost",
+		Host:        "localhost",
+		Port:        1025,
+		Encryption:  "none",
+		FromName:    "Info",
+		FromAddress: "info@mycompany.com",
+		Wait:        app.Wait,
+		ErrorChan:   errorChan,
+		MailerChane: mailerChan,
+		DoneChan:    mailerDoneChan,
+	}
+
+	return mail
 }
 
 func (app *Config) serve() {
