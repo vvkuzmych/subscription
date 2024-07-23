@@ -23,21 +23,30 @@ func (app *Config) PostLoginPage(w http.ResponseWriter, r *http.Request) {
 	email := r.Form.Get("email")
 	password := r.Form.Get("password")
 	user, err := app.Models.User.GetByEmail(email)
+	errMessage := "invalid credentials"
+	loginUrl := "/login"
 	if err != nil {
-		app.Session.Put(r.Context(), "error", "invalid credentials")
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		app.Session.Put(r.Context(), "error", errMessage)
+		http.Redirect(w, r, loginUrl, http.StatusSeeOther)
 		return
 	}
 	// check password
 	validPassword, err := user.PasswordMatches(password)
 	if err != nil {
-		app.Session.Put(r.Context(), "error", "invalid credentials")
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		app.Session.Put(r.Context(), "error", errMessage)
+		http.Redirect(w, r, loginUrl, http.StatusSeeOther)
 		return
 	}
 	if !validPassword {
-		app.Session.Put(r.Context(), "error", "invalid credentials")
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		msg := Message{
+			To:      email,
+			Subject: "Failed log in attempt",
+			Data:    "Invalid login attempt.",
+		}
+		app.sendEmail(msg)
+
+		app.Session.Put(r.Context(), "error", errMessage)
+		http.Redirect(w, r, loginUrl, http.StatusSeeOther)
 		return
 	}
 	// log user in
