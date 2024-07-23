@@ -2,6 +2,8 @@ package main
 
 import "net/http"
 
+var loginUrl = "/login"
+
 func (app *Config) HomePage(w http.ResponseWriter, r *http.Request) {
 	app.render(w, r, "home.page.gohtml", nil)
 }
@@ -24,7 +26,7 @@ func (app *Config) PostLoginPage(w http.ResponseWriter, r *http.Request) {
 	password := r.Form.Get("password")
 	user, err := app.Models.User.GetByEmail(email)
 	errMessage := "invalid credentials"
-	loginUrl := "/login"
+
 	if err != nil {
 		app.Session.Put(r.Context(), "error", errMessage)
 		http.Redirect(w, r, loginUrl, http.StatusSeeOther)
@@ -64,7 +66,7 @@ func (app *Config) Logout(w http.ResponseWriter, r *http.Request) {
 	_ = app.Session.Destroy(r.Context())
 	_ = app.Session.RenewToken(r.Context())
 
-	http.Redirect(w, r, "/login", http.StatusSeeOther)
+	http.Redirect(w, r, loginUrl, http.StatusSeeOther)
 }
 
 func (app *Config) RegisterPage(w http.ResponseWriter, r *http.Request) {
