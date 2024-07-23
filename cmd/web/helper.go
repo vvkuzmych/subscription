@@ -2,5 +2,5 @@ package main
 
 func (app *Config) sendEmail(msg Message) {
 	app.Wait.Add(1)
-	app.Mailer.MailerChane <- msg
+	app.Mailer.MailerChan <- msg
 }
