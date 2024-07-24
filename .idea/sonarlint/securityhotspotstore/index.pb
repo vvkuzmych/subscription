@@ -66,3 +66,5 @@ a
 1cmd/web/templates/confirmation-email.plain.gohtml,d/6/d64b8cf7bdcd4a6dc1e71831db620ee39a9af51b
 A
 cmd/web/signer.go,4/6/4627c1a8dbf61a2f8f62e265318b3ba324891d7f
+S
+#cmd/web/templates/plans.page.gohtml,9/2/92004841b94f93779955001cbc347880dcd4b15e
