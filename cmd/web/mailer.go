@@ -76,7 +76,7 @@ func (m *Mail) sendMail(msg Message, errorChan chan error) {
 
 	// build plain text mail
 	plainMessage, err := m.buildPlainTextMessage(msg)
-	_ = plainMessage
+
 	if err != nil {
 		errorChan <- err
 	}
@@ -96,6 +96,7 @@ func (m *Mail) sendMail(msg Message, errorChan chan error) {
 	}
 	email := mail.NewMSG()
 	email.SetFrom(msg.From).AddTo(msg.To).SetSubject(msg.Subject)
+	email.SetBody(mail.TextPlain, plainMessage)
 	email.AddAlternative(mail.TextHTML, formattedMessage)
 
 	if len(msg.Attachments) > 0 {
