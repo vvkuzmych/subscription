@@ -60,3 +60,9 @@ S
 #.idea/sonarlint/issuestore/index.pb,9/f/9fe84ebb15faf917b7def6236dba604453cc61e0
 A
 cmd/web/helper.go,6/d/6dfdade0637bc2376335cbabc810183155560c88
+`
+0cmd/web/templates/confirmation-email.html.gohtml,3/3/33c7ef2dccfaccb64f762725b95a148eb4201ada
+a
+1cmd/web/templates/confirmation-email.plain.gohtml,d/6/d64b8cf7bdcd4a6dc1e71831db620ee39a9af51b
+A
+cmd/web/signer.go,4/6/4627c1a8dbf61a2f8f62e265318b3ba324891d7f
