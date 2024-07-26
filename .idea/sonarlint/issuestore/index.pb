@@ -68,3 +68,7 @@ A
 cmd/web/signer.go,4/6/4627c1a8dbf61a2f8f62e265318b3ba324891d7f
 S
 #cmd/web/templates/plans.page.gohtml,9/2/92004841b94f93779955001cbc347880dcd4b15e
+U
+%cmd/web/templates/invoice.html.gohtml,b/b/bbfcba3bfba410879624643030febe7b9103e6e4
+V
+&cmd/web/templates/invoice.plain.gohtml,4/8/482acbea9dea9282ed0c91afe605a137f588534d
