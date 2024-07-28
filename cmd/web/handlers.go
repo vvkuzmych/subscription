@@ -198,7 +198,7 @@ func (app *Config) SubscribeToPlan(w http.ResponseWriter, r *http.Request) {
 
 	go func() {
 		defer app.Wait.Done()
-		invoice, err := app.getInvoice(user, plan)
+		invoice, err := app.getInvoice(plan)
 		if err != nil {
 			app.ErrorChan <- err
 		}
@@ -279,6 +279,6 @@ func (app *Config) generateManual(u data.User, plan *data.Plan) *gofpdf.Fpdf {
 	return pdf
 }
 
-func (app *Config) getInvoice(u data.User, plan *data.Plan) (string, error) {
+func (app *Config) getInvoice(plan *data.Plan) (string, error) {
 	return plan.PlanAmountFormatted, nil
 }
