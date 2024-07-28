@@ -87,7 +87,7 @@ func (app *Config) PostRegisterPage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		app.ErrorLog.Println(err)
 	}
-	// TODO - validate user
+	// TO DO - validate user
 
 	// create user
 	u := data.User{
@@ -178,9 +178,10 @@ func (app *Config) SubscribeToPlan(w http.ResponseWriter, r *http.Request) {
 
 	// get the plan from database
 	plan, err := app.Models.Plan.GetOne(planID)
+	urlMembersPlans := "/members/plans"
 	if err != nil {
 		app.Session.Put(r.Context(), "error", "Unable to find plan.")
-		http.Redirect(w, r, "/members/plans", http.StatusSeeOther)
+		http.Redirect(w, r, urlMembersPlans, http.StatusSeeOther)
 		return
 	}
 
@@ -242,7 +243,7 @@ func (app *Config) SubscribeToPlan(w http.ResponseWriter, r *http.Request) {
 	err = app.Models.Plan.SubscribeUserToPlan(user, *plan)
 	if err != nil {
 		app.Session.Put(r.Context(), "error", "Error subscribing to plan!")
-		http.Redirect(w, r, "/members/plans", http.StatusSeeOther)
+		http.Redirect(w, r, urlMembersPlans, http.StatusSeeOther)
 		return
 	}
 
@@ -257,7 +258,7 @@ func (app *Config) SubscribeToPlan(w http.ResponseWriter, r *http.Request) {
 
 	// redirect
 	app.Session.Put(r.Context(), "flash", "Subscribed!")
-	http.Redirect(w, r, "/members/plans", http.StatusSeeOther)
+	http.Redirect(w, r, urlMembersPlans, http.StatusSeeOther)
 }
 
 func (app *Config) generateManual(u data.User, plan *data.Plan) *gofpdf.Fpdf {
