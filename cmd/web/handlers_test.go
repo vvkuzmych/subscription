@@ -108,3 +108,28 @@ func TestConfig_PostLoginPageLogin(t *testing.T) {
 		t.Errorf("user not found in session")
 	}
 }
+
+func TestConfig_SubscribeToPlan(t *testing.T) {
+	rr := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/subscribe?id=1", nil)
+	ctx := getCtx(req)
+	req = req.WithContext(ctx)
+
+	testApp.Session.Put(ctx, "userID", data.User{
+		ID:        1,
+		Email:     "admin@example.com",
+		FirstName: "Admin",
+		LastName:  "User",
+		Active:    1,
+	})
+
+	handler := http.HandlerFunc(testApp.SubscribeToPlan)
+	handler.ServeHTTP(rr, req)
+
+	testApp.Wait.Wait()
+
+	assert.Equal(t, http.StatusSeeOther, rr.Code)
+	if rr.Code != http.StatusSeeOther {
+		t.Errorf("handler returned wrong status code: got %v want %v", rr.Code, http.StatusSeeOther)
+	}
+}
