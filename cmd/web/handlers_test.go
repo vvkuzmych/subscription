@@ -42,6 +42,16 @@ var pageTests = []struct {
 			"user":   data.User{},
 		},
 	},
+	{
+		name:               "logout",
+		url:                "/logout",
+		expectedStatusCode: http.StatusSeeOther,
+		handler:            testApp.Logout,
+		sessionData: map[string]any{
+			"userID": 1,
+			"user":   data.User{},
+		},
+	},
 }
 
 func TestConfig_Pages(t *testing.T) {
@@ -62,10 +72,11 @@ func TestConfig_Pages(t *testing.T) {
 		//handler := http.HandlerFunc(testApp.HomePage)
 		e.handler.ServeHTTP(rr, req)
 
-		assert.Equal(t, http.StatusOK, rr.Code)
-		if rr.Code != http.StatusOK {
+		assert.Equal(t, e.expectedStatusCode, rr.Code)
+		if rr.Code != e.expectedStatusCode {
 			t.Errorf("%s handler returned wrong status code: got %v want %v", e.name, rr.Code, e.expectedStatusCode)
 		}
+
 		if len(e.expectedHTML) > 0 {
 			html := rr.Body.String()
 			assert.Contains(t, html, e.expectedHTML)
