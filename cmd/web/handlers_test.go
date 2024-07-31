@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"subscription/data"
 	"testing"
@@ -84,5 +85,26 @@ func TestConfig_Pages(t *testing.T) {
 				t.Errorf("handler returned unexpected body: got %v want %v", html, e.expectedHTML)
 			}
 		}
+	}
+}
+
+func TestConfig_PostLoginPageLogin(t *testing.T) {
+	pathToTemplates = "./templates"
+	postedData := url.Values{
+		"email":    {"admin@example.com"},
+		"password": {"qwerty123qwerty"},
+	}
+	rr := httptest.NewRecorder()
+	req, _ := http.NewRequest("POST", "/login", strings.NewReader(postedData.Encode()))
+	ctx := getCtx(req)
+	req = req.WithContext(ctx)
+	handler := http.HandlerFunc(testApp.PostLoginPage)
+	handler.ServeHTTP(rr, req)
+	assert.Equal(t, http.StatusSeeOther, rr.Code)
+	if rr.Code != http.StatusSeeOther {
+		t.Errorf("handler returned wrong status code: got %v want %v", rr.Code, http.StatusSeeOther)
+	}
+	if !testApp.Session.Exists(ctx, "userID") {
+		t.Errorf("user not found in session")
 	}
 }

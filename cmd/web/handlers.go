@@ -42,7 +42,7 @@ func (app *Config) PostLoginPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// check password
-	validPassword, err := user.PasswordMatches(password)
+	validPassword, err := app.Models.User.PasswordMatches(password)
 	if err != nil {
 		app.Session.Put(r.Context(), "error", errMessage)
 		http.Redirect(w, r, loginUrl, http.StatusSeeOther)
@@ -99,7 +99,7 @@ func (app *Config) PostRegisterPage(w http.ResponseWriter, r *http.Request) {
 		IsAdmin:   0,
 	}
 
-	_, err = u.Insert(u)
+	_, err = app.Models.User.Insert(u)
 	if err != nil {
 		app.Session.Put(r.Context(), "error", "Unable to create user.")
 		http.Redirect(w, r, "/register", http.StatusSeeOther)
@@ -140,7 +140,7 @@ func (app *Config) ActivateAccount(w http.ResponseWriter, r *http.Request) {
 	}
 
 	u.Active = 1
-	err = u.Update()
+	err = app.Models.User.Update(*u)
 	if err != nil {
 		app.Session.Put(r.Context(), "error", "Unable to update user")
 		http.Redirect(w, r, loginUrl, http.StatusSeeOther)
@@ -148,12 +148,6 @@ func (app *Config) ActivateAccount(w http.ResponseWriter, r *http.Request) {
 	}
 	app.Session.Put(r.Context(), "flash", "Account activated. You can now login in.")
 	http.Redirect(w, r, loginUrl, http.StatusSeeOther)
-	// generate an invoice
-
-	// send an email with attachments
-
-	// send an email with the invoice attached
-
 }
 
 func (app *Config) ChooseSubscription(w http.ResponseWriter, r *http.Request) {
